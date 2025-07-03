@@ -2,9 +2,10 @@ import { useEffect, useState, useContext } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { AuthContext } from '../context/AuthContext';
 
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
+  import.meta.url,
 ).toString();
 
 export default function Documents() {
@@ -73,19 +74,20 @@ export default function Documents() {
       {previewUrl && (
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-2">PDF Preview</h3>
-          <div className="border p-4">
+          <div className="inline-block p-4 rounded max-w-[400px] w-full">
             <Document file={previewUrl}>
               <Page pageNumber={1} />
             </Document>
             <button
               onClick={() => setPreviewUrl(null)}
-              className="mt-4 bg-gray-600 text-white px-4 py-2 rounded"
+              className="mt-4 bg-gray-600 text-white px-4 py-2 rounded w-full"
             >
               Close Preview
             </button>
           </div>
         </div>
       )}
+
     </div>
   );
 }
