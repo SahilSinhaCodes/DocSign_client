@@ -3,6 +3,8 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { AuthContext } from '../context/AuthContext';
 import SignaturePad from '../components/SignaturePad';
 import { PDFDocument, rgb } from 'pdf-lib';
+import ResizableSignature from '../components/ResizableSignature'; // at the top
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -17,6 +19,8 @@ export default function Sign() {
 
   const [signatureUrl, setSignatureUrl] = useState(null);
   const [dragPos, setDragPos] = useState(null);
+  const [signatureSize, setSignatureSize] = useState({ width: 150, height: 75 });
+
   const [pageSize, setPageSize] = useState({ width: 0, height: 0 });
 
   const [showSignaturePad, setShowSignaturePad] = useState(false);
@@ -54,9 +58,16 @@ export default function Sign() {
     const rect = container.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top + container.scrollTop) / rect.height;
+
+    console.log('[DROP] client:', e.clientX, e.clientY);
+    console.log('[DROP] rect:', rect);
+    console.log('[DROP] normalized:', x, y);
+
     setDragPos({ x, y });
     setIsDragging(false);
   };
+
+
 
   const handleSave = async () => {
     await fetch('http://localhost:5000/api/signatures/save', {
@@ -97,13 +108,14 @@ export default function Sign() {
   const imageHeight = signatureImage.height * scale;
 
   const x = dragPos.x * width;
-  const y = height - (dragPos.y * height) - imageHeight;
+  const y = dragPos.y * height;
+  const drawY = height - y - signatureSize.height;
 
   page.drawImage(signatureImage, {
     x,
-    y,
-    width: imageWidth,
-    height: imageHeight,
+    y: drawY,
+    width: signatureSize.width,
+    height: signatureSize.height,
   });
 
   // 5. Download the signed PDF
@@ -164,18 +176,21 @@ export default function Sign() {
                 />
               </Document>
 
-              {dragPos && (
-                <img
-                  src={signatureUrl}
-                  alt="signature"
-                  className="absolute"
-                  style={{
-                    top: `${dragPos.y * pageSize.height}px`,
-                    left: `${dragPos.x * pageSize.width}px`,
-                    width: '150px',
-                  }}
-                />
-              )}
+              {dragPos && signatureUrl && (
+  <ResizableSignature
+    imageUrl={signatureUrl}
+    x={dragPos.x}
+    y={dragPos.y}
+    width={signatureSize.width}
+    height={signatureSize.height}
+    pageSize={pageSize}
+    onDrag={(pos) => setDragPos(pos)}
+    onResize={(size) => setSignatureSize(size)}
+  />
+)}
+
+
+
             </div>
 
             {/* Signature Panel */}
