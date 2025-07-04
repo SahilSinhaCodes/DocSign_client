@@ -4,7 +4,8 @@ import { AuthContext } from '../context/AuthContext';
 import SignaturePad from '../components/SignaturePad';
 import { PDFDocument, rgb } from 'pdf-lib';
 import ResizableSignature from '../components/ResizableSignature'; // at the top
-
+import { ResizableBox } from 'react-resizable';
+import 'react-resizable/css/styles.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -210,17 +211,34 @@ export default function Sign() {
 
             {/* Signature Panel */}
             {signatureUrl && !dragPos && (
-              <div className="w-48 h-48 border rounded flex items-center justify-center">
-                <img
-                  src={signatureUrl}
-                  alt="signature"
-                  draggable
-                  onDragStart={() => setIsDragging(true)}
-                  className="cursor-move border-2 border-blue-500"
-                  style={{ width: '150px' }}
-                />
+              <div className="relative w-[200px] h-[200px] border rounded flex items-center justify-center overflow-hidden bg-gray-50">
+                <ResizableBox
+                  width={signatureSize.width}
+                  height={signatureSize.height}
+                  minConstraints={[50, 30]}
+                  maxConstraints={[300, 200]}
+                  resizeHandles={['se']}
+                  onResizeStop={(e, data) => {
+                    setSignatureSize({ width: data.size.width, height: data.size.height });
+                  }}
+                >
+                  <img
+                    src={signatureUrl}
+                    alt="signature"
+                    draggable
+                    onDragStart={() => setIsDragging(true)}
+                    className="cursor-move"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      userSelect: 'none',
+                      pointerEvents: 'auto',
+                    }}
+                  />
+                </ResizableBox>
               </div>
             )}
+
           </div>
 
           {/* Save & Apply Buttons */}
