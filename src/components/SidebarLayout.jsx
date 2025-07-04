@@ -21,7 +21,7 @@ export default function SidebarLayout() {
     <div className="flex min-h-screen relative">
       {/* Sidebar */}
       <aside className="w-64 bg-gray-100 p-4 shadow">
-        <Link to="/" className="text-2xl font-bold block mb-6 text-blue-700">DocuSign</Link>
+        <Link to="/" className="text-2xl font-bold block mb-6 text-blue-700">DocSign</Link>
         <nav className="space-y-2">
           <Link to="/sign" className={linkStyle('/sign')}>Sign a Document</Link>
           <Link to="/documents" className={linkStyle('/documents')}>Documents</Link>
