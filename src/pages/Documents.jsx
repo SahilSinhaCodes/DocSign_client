@@ -15,7 +15,7 @@ export default function Documents() {
   const [loading, setLoading] = useState(true);
 
   const fetchDocs = async () => {
-    const res = await fetch('http://localhost:5000/api/docs/my-docs', {
+    const res = await fetch('https://docsign-server-tdjp.onrender.com/api/docs/my-docs', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +33,7 @@ export default function Documents() {
     const confirm = window.confirm("Are you sure you want to delete this document?");
     if (!confirm) return;
 
-    await fetch(`http://localhost:5000/api/docs/${docId}`, {
+    await fetch(`https://docsign-server-tdjp.onrender.com/api/docs/${docId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ export default function Documents() {
         <div className="divide-y border rounded-md overflow-hidden">
           {docs.map((doc) => (
             <div key={doc._id} className="flex justify-between items-center p-4 hover:bg-gray-50">
-              <div onClick={() => setPreviewUrl(`http://localhost:5000/${doc.path}`)} className="cursor-pointer">
+              <div onClick={() => setPreviewUrl(`https://docsign-server-tdjp.onrender.com/${doc.path}`)} className="cursor-pointer">
                 <p className="font-semibold">{doc.originalName}</p>
                 <p className="text-sm text-gray-500">{new Date(doc.createdAt).toLocaleString()}</p>
               </div>

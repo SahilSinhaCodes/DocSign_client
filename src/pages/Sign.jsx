@@ -36,14 +36,14 @@ export default function Sign() {
     const formData = new FormData();
     formData.append('file', file);
 
-    const res = await fetch('http://localhost:5000/api/docs/upload', {
+    const res = await fetch('https://docsign-server-tdjp.onrender.com/api/docs/upload', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
 
     const data = await res.json();
-    setServerPath(`http://localhost:5000/${data.doc.path}`);
+    setServerPath(`https://docsign-server-tdjp.onrender.com/${data.doc.path}`);
     setFileId(data.doc._id);
   };
 
@@ -71,7 +71,7 @@ export default function Sign() {
 
 
   const handleSave = async () => {
-    await fetch('http://localhost:5000/api/signatures/save', {
+    await fetch('https://docsign-server-tdjp.onrender.com/api/signatures/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
