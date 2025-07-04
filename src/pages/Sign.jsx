@@ -134,7 +134,22 @@ export default function Sign() {
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold">Sign a Document</h2>
 
-      <input type="file" accept="application/pdf" onChange={handleUpload} />
+      <div className="relative w-fit">
+        <label
+          htmlFor="pdf-upload"
+          className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow-md inline-block"
+        >
+          Choose PDF File
+        </label>
+        <input
+          id="pdf-upload"
+          type="file"
+          accept="application/pdf"
+          onChange={handleUpload}
+          className="absolute left-0 top-0 opacity-0 w-full h-full cursor-pointer"
+        />
+      </div>
+      
 
       {showSignaturePad && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
